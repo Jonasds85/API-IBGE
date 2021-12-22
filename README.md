@@ -7,7 +7,9 @@ sincronize executando o seguinte comando no terminal: mvn dependency:purge-local
 acesse pelo swagger no link: http://localhost:8080/swagger-ui.html#/
 
 link para gerar arquivo CSV : http://localhost:8080/api/municipio/DownloadCSV/SC
+
 link download municipios em formato CSV : http://localhost:8080/api/municipio/DownloadCSVbyte/SC
+
 link download municipios em formato JSON : http://localhost:8080/api/municipio/DownloadJSON/SC
 
 
