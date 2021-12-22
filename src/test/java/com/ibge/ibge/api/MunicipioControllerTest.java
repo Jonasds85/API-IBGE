@@ -32,7 +32,7 @@ public class MunicipioControllerTest {
     private HttpServletResponse response;
 
     @Test
-    public void injetarDependenciaSucesso()  {
+    public void injectionDependencyMunicipioServiceSuccess()  {
         assertThat(this.municipioService).isNotNull();
     }
 
