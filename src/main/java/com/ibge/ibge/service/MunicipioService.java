@@ -50,7 +50,7 @@ public class MunicipioService {
     }
 
     @Cacheable(unless = "#result == null")
-    public Long GetIdMunicipioPorNome(String uf, String nomeMunicipio) {   
+    public Long GetIdMunicipioPorNome(String uf, String nomeMunicipio) {           
         List<Municipio> municipios = GetMunicipios(uf);
         Municipio municipio = municipios.stream()
             .filter(m -> m.getNomeCidade().toUpperCase().equals(nomeMunicipio.toUpperCase()))

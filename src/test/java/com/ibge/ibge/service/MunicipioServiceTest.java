@@ -50,7 +50,7 @@ public class MunicipioServiceTest {
 
     @Test
     public void GetIdMunicipioSuccess() {
-        Long IdMunicipio = this.municipioService.GetIdMunicipioPorNome("SC", "Itajaí");
+        Long IdMunicipio = this.municipioService.GetIdMunicipioPorNome("SC", "Navegantes");
         assertThat(IdMunicipio).isNotNull();        
         assertThat(IdMunicipio).isNotZero();
         assertThat(IdMunicipio).isGreaterThan(0);

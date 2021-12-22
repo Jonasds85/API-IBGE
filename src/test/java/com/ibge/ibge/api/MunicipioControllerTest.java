@@ -54,7 +54,5 @@ public class MunicipioControllerTest {
     @Test
     public void GetIdMunicipioSucesso() throws Exception {
         this.mockMvc.perform(get("/api/Municipio/GetIdMunicipio/SC/Itajaí")).andDo(print()).andExpect(status().isOk());
-    }    
-
-
+    }   
 }
