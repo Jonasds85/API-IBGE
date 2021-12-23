@@ -1,0 +1,128 @@
+@startuml
+class com.ibge.ibge.externo.FeignClintConfig {
+- {static} ObjectMapper mapper
++ OkHttpClient client()
++ Encoder encoder()
++ Decoder decoder()
++ Logger feignLogger()
+}
+interface com.ibge.ibge.externo.IIBGEMunicipio {
++ {abstract}List<Municipio> MunicipiosPorUF(String)
++ {abstract}List<Municipio> Municipios()
+}
+class com.ibge.ibge.service.EstadoService {
+- IIBGEEstado ibgeEstado
+- FallBackIBGEEstado fallBackIBGEEstado
+- CircuitBreakerFactory circuitBreakerFactory
+- GenerateFileJson GenerateJson
+- GenerateFileCsv GenerateCSV
++ String EstadosJson()
++ ByteArrayOutputStream EstadosCSV()
+- List<Estado> GetEstados()
+}
+class com.ibge.ibge.relatorios.GenerateFileCsv {
+- {static} Logger logger
++ ByteArrayOutputStream GenerateCSV(List<T>)
+- String GetCabecario(List<T>)
+}
+interface com.ibge.ibge.externo.IIBGEEstado {
++ {abstract}List<Estado> Estados()
+}
+class com.ibge.ibge.api.controller.EstadoController {
+- EstadoService estadoService
++ ResponseEntity<byte[]> DownloadJson()
++ OutputStream DownloadCSV(HttpServletResponse)
+}
+class com.ibge.ibge.IbgeApplication {
++ {static} void main(String[])
+}
+class com.ibge.ibge.model.Estado {
+- long id
+- String sigla
+- String nome
++ <<Create>> Estado()
++ <<Create>> Estado(long,String,String)
++ String toString()
+}
+class com.ibge.ibge.service.MunicipioService {
+- IIBGEMunicipio ibgeMunicipio
+- FallBackIBGEMunicipio fallBackIBGEMunicipio
+- CircuitBreakerFactory circuitBreakerFactory
+- GenerateFileJson GenerateJson
+- GenerateFileCsv GenerateCSV
++ String MunicipiosJson(String)
++ ByteArrayOutputStream MunicipiosCSV(String)
++ Long GetIdMunicipioPorNome(String,String)
+- List<Municipio> GetMunicipios(String)
+}
+class com.ibge.ibge.service.cache.CacheConfig {
++ CacheManager cacheManager()
+}
+interface com.ibge.ibge.api.interfaces.IEstadoController {
++ {abstract}ResponseEntity<byte[]> DownloadJson()
++ {abstract}OutputStream DownloadCSV(HttpServletResponse)
+}
+class com.ibge.ibge.model.DeserializerJson.JsonMunicipio {
+# <<Create>> JsonMunicipio(Class<?>)
++ <<Create>> JsonMunicipio()
++ Municipio deserialize(JsonParser,DeserializationContext)
+}
+class com.ibge.ibge.externo.FallBackIBGEMunicipio {
++ List<Municipio> MunicipiosPorUF(String)
++ List<Municipio> Municipios()
+}
+class com.ibge.ibge.config.Resilience4JConfig {
++ TimeLimiterConfig timeLimiterConfig()
++ CircuitBreakerConfig circuitBreakerConfig()
++ Customizer<Resilience4JCircuitBreakerFactory> customConfig()
+}
+class com.ibge.ibge.model.DeserializerJson.JsonEstado {
+# <<Create>> JsonEstado(Class<?>)
++ <<Create>> JsonEstado()
++ Estado deserialize(JsonParser,DeserializationContext)
+}
+class com.ibge.ibge.externo.FallBackIBGEEstado {
++ List<Estado> Estados()
+}
+interface com.ibge.ibge.api.interfaces.IMunicipioController {
++ {abstract}ResponseEntity<byte[]> DownloadJson(String)
++ {abstract}OutputStream DownloadCSV(HttpServletResponse,String)
++ {abstract}ResponseEntity<Long> GetIdMunicipio(String,String)
+}
+class com.ibge.ibge.model.Municipio {
+- long id
+- long idEstado
+- String siglaEstado
+- String regiaoNome
+- String nomeCidade
+- String nomeMesorregiao
+- String nomeFormatado
++ <<Create>> Municipio()
++ <<Create>> Municipio(long,long,String,String,String,String,String)
++ String toString()
+}
+class com.ibge.ibge.service.Estados {
+}
+class com.ibge.ibge.api.controller.MunicipioController {
+- MunicipioService municipioService
++ ResponseEntity<byte[]> DownloadJson(String)
++ OutputStream DownloadCSV(HttpServletResponse,String)
++ ResponseEntity<Long> GetIdMunicipio(String,String)
+}
+class com.ibge.ibge.relatorios.GenerateFileJson {
+- {static} Logger logger
++ String Generate(List<T>)
+}
+class com.ibge.ibge.config.SwaggerConfig {
++ Docket productApi()
+- ApiInfo metaInfo()
+}
+
+
+com.ibge.ibge.api.interfaces.IEstadoController <|.. com.ibge.ibge.api.controller.EstadoController
+com.fasterxml.jackson.databind.deser.std.StdDeserializer <|-- com.ibge.ibge.model.DeserializerJson.JsonMunicipio
+com.ibge.ibge.externo.IIBGEMunicipio <|.. com.ibge.ibge.externo.FallBackIBGEMunicipio
+com.fasterxml.jackson.databind.deser.std.StdDeserializer <|-- com.ibge.ibge.model.DeserializerJson.JsonEstado
+com.ibge.ibge.externo.IIBGEEstado <|.. com.ibge.ibge.externo.FallBackIBGEEstado
+com.ibge.ibge.api.interfaces.IMunicipioController <|.. com.ibge.ibge.api.controller.MunicipioController
+@enduml

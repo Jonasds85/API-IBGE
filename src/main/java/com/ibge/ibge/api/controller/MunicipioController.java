@@ -38,7 +38,7 @@ public class MunicipioController implements IMunicipioController {
 
     @Override
     public OutputStream DownloadCSV(HttpServletResponse response, @PathVariable(value = "uf") String uf) throws IOException, Exception {
-        response.setHeader("Content-Disposition","attachment; filename=estados.csv");
+        response.setHeader("Content-Disposition","attachment; filename=municipios.csv");
         OutputStream servletOutputStream = response.getOutputStream();
         municipioService.MunicipiosCSV(uf).writeTo(servletOutputStream);
         servletOutputStream.flush();

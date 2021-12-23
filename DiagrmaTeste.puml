@@ -1,0 +1,43 @@
+@startuml
+class com.ibge.ibge.api.EstadoControllerTest {
++ void setUp()
++ void DownloadJsonSucesso()
+}
+class com.ibge.ibge.service.MunicipioServiceTest {
+- MunicipioService municipioService
+- IIBGEMunicipio iibgeMunicipio
++ void injectionDependencyMunicipioServiceSuccess()
++ void injectionDependencyIBGEMunicipioSuccess()
++ void DownloadJsonSuccess()
++ void DownloadCSVSuccess()
++ void GetIdMunicipioSuccess()
+}
+class com.ibge.ibge.service.EstadoServiceTest {
+- EstadoService EstadoService
+- IIBGEEstado ibgeEstado
++ void injectionDependencyEstadoServiceSuccess()
++ void injectionDependencyIBGEEstadoSuccess()
++ void DownloadJsonSuccess()
++ void DownloadCSVSuccess()
+}
+abstract class com.ibge.ibge.api.AbstractController {
+# MockMvc mvc
+~ WebApplicationContext webApplicationContext
++ MvcResult testRequisition(String)
++ MvcResult testOutputStreamRequisition(String)
+# void setUp()
+# String mapToJson(Object)
+# T mapFromJson(String,Class<T>)
+}
+class com.ibge.ibge.api.MunicipioControllerTest {
+- MunicipioService municipioService
++ void setUp()
++ void injectionDependencyMunicipioServiceSuccess()
++ void DownloadJsonSucesso()
++ void GetIdMunicipioSucesso()
+}
+
+
+com.ibge.ibge.api.AbstractController <|-- com.ibge.ibge.api.EstadoControllerTest
+com.ibge.ibge.api.AbstractController <|-- com.ibge.ibge.api.MunicipioControllerTest
+@enduml
