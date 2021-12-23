@@ -1,6 +1,8 @@
 package com.ibge.ibge.api.interfaces;
 
 import java.io.IOException;
+import java.io.OutputStream;
+
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,17 +28,12 @@ public interface IMunicipioController {
 
 
     @CrossOrigin
-    @ApiOperation(value = "Retorna arquivo CSV com lista de municipios")    
+    @ApiOperation(value = "Retorna arquivo CSV com lista de municipios") 
+    @ResponseStatus(HttpStatus.OK)   
     @RequestMapping(value="/DownloadCSV/{uf}", method= RequestMethod.GET, produces = APPLICATION_OCTET_STREAM_VALUE)
-    public abstract void DownloadCSV(HttpServletResponse response, @PathVariable(value = "uf") String uf) throws IOException, Exception;
+    public abstract OutputStream DownloadCSV(HttpServletResponse response, @PathVariable(value = "uf") String uf) throws IOException, Exception;
 
     
-    @CrossOrigin
-    @ApiOperation(value = "Retorna arquivo CSV com lista de municipios")    
-    @RequestMapping(value="/DownloadCSVbyte/{uf}", method= RequestMethod.GET, produces = APPLICATION_OCTET_STREAM_VALUE)
-    public abstract ResponseEntity<byte[]> DownloadCSVbyte(@PathVariable(value = "uf") String uf)throws IOException, Exception;
-
-
     @CrossOrigin
     @ApiOperation(value = "busca id do municipio pelo nome e UF")
     @ResponseStatus(HttpStatus.OK)

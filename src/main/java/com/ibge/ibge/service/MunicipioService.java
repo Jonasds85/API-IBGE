@@ -2,13 +2,11 @@ package com.ibge.ibge.service;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
-
 import com.ibge.ibge.externo.FallBackIBGEMunicipio;
 import com.ibge.ibge.externo.IIBGEMunicipio;
 import com.ibge.ibge.model.Municipio;
-import com.ibge.ibge.relatorios.GenerateCsvMunicipio;
-import com.ibge.ibge.relatorios.GenerateJsonMunicipio;
-
+import com.ibge.ibge.relatorios.GenerateFileCsv;
+import com.ibge.ibge.relatorios.GenerateFileJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -30,23 +28,19 @@ public class MunicipioService {
     
     @Autowired()
     private CircuitBreakerFactory circuitBreakerFactory;
+
+    @Autowired()
+    private GenerateFileJson GenerateJson;
+
+    @Autowired()
+    private GenerateFileCsv GenerateCSV;
     
-    @Cacheable(unless = "#result == null or #result.size() == 0")
-    public List<Municipio> GetMunicipiosIBGE(String uf) {
-        return GetMunicipios(uf);
-    }    
-    
-    public String MunicipiosJson(String uf){
-        List<Municipio> municipios = GetMunicipios(uf);
-        GenerateJsonMunicipio json = new GenerateJsonMunicipio(municipios);
-        String JsonResult = json.Generate();
-        return JsonResult;
+    public String MunicipiosJson(String uf){                
+        return GenerateJson.Generate(GetMunicipios(uf));
     }
 
-    public ByteArrayOutputStream MunicipiosCSV(String uf) {        
-        List<Municipio> municipios = GetMunicipios(uf);
-        GenerateCsvMunicipio CsvMunicipio = new GenerateCsvMunicipio(municipios);        
-        return CsvMunicipio.GenerateCSV();
+    public ByteArrayOutputStream MunicipiosCSV(String uf){    
+        return GenerateCSV.GenerateCSV(GetMunicipios(uf));
     }
 
     @Cacheable(unless = "#result == null")
@@ -63,11 +57,14 @@ public class MunicipioService {
         return municipio.getId();
     }
 
+    @Cacheable(unless = "#result == null or #result.size() == 0")
     private List<Municipio> GetMunicipios(String uf){
-        CircuitBreaker cb = circuitBreakerFactory.create("nameservicebreaker");
+        CircuitBreaker cb = circuitBreakerFactory.create("nameservicebreakerMunicipio");
         if (uf.isEmpty())
-            return cb.run(() -> this.ibgeMunicipio.Municipios(), throwable -> fallBackIBGEMunicipio.Municipios());        
+            return cb.run(() -> this.ibgeMunicipio.Municipios(), 
+                   throwable -> fallBackIBGEMunicipio.Municipios());        
 
-        return cb.run(() -> this.ibgeMunicipio.Municipios(), throwable -> fallBackIBGEMunicipio.MunicipiosPorUF(uf));         
+        return cb.run(() -> this.ibgeMunicipio.MunicipiosPorUF(uf), 
+               throwable -> fallBackIBGEMunicipio.MunicipiosPorUF(uf));         
     }
 }

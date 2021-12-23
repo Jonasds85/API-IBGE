@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "IIBGEMunicipio", 
              url = "https://servicodados.ibge.gov.br",
-             configuration = FeignClintConfig.class
-             //fallback = FallBackIBGEMunicipio.class
-             )
+             configuration = FeignClintConfig.class)
              
 public interface IIBGEMunicipio {
     @GetMapping(value = "/api/v1/localidades/estados/{UF}/municipios")

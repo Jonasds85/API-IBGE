@@ -1,6 +1,8 @@
 package com.ibge.ibge.api.controller;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import com.google.common.net.HttpHeaders;
@@ -35,29 +37,15 @@ public class MunicipioController implements IMunicipioController {
 
 
     @Override
-    public void DownloadCSV(HttpServletResponse response, @PathVariable(value = "uf") String uf) throws IOException, Exception {
-        ServletOutputStream servletOutputStream = response.getOutputStream();
-        ByteArrayOutputStream bout = municipioService.MunicipiosCSV(uf);
-        bout.writeTo(servletOutputStream);
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment;filename=municipios.csv";
-        response.setHeader(headerKey, headerValue);        
-        response.setContentType("text/csv");        
-        response.flushBuffer();            
+    public OutputStream DownloadCSV(HttpServletResponse response, @PathVariable(value = "uf") String uf) throws IOException, Exception {
+        response.setHeader("Content-Disposition","attachment; filename=estados.csv");
+        OutputStream servletOutputStream = response.getOutputStream();
+        municipioService.MunicipiosCSV(uf).writeTo(servletOutputStream);
+        servletOutputStream.flush();
+        servletOutputStream.close();
+        return servletOutputStream;      
     }
 
-
-    @Override
-    public ResponseEntity<byte[]> DownloadCSVbyte(@PathVariable(value = "uf") String uf) throws IOException, Exception {
-        ByteArrayOutputStream bout = municipioService.MunicipiosCSV(uf);
-        byte[] result = bout.toByteArray();
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=municipios.csv")
-                .contentType(MediaType.APPLICATION_JSON)
-                .contentLength(result.length)
-                .body(result);       
-    }   
 
 
     @Override
